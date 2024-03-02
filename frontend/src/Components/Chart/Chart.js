@@ -1,51 +1,71 @@
-import React from 'react';
-import { Chart as ChartJs, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement } from 'chart.js';
-import { Line } from 'react-chartjs-2';
-import styled from 'styled-components';
+import React from 'react'
+import {Chart as ChartJs, 
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+    ArcElement,
+} from 'chart.js'
+
+import {Line} from 'react-chartjs-2'
+import styled from 'styled-components'
+import { useGlobalContext } from '../../context/globalContext'
 import { dateFormat } from '../../utils/dateFormat'
 
-
-ChartJs.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement);
+ChartJs.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+    ArcElement,
+)
 
 function Chart() {
-    // Datos estáticos para ingresos y gastos
-    const incomes = [
-        { date: '2022-01-01', amount: 100 },
-        { date: '2022-01-02', amount: 150 },
-        { date: '2022-01-03', amount: 200 },
-        // Agrega más datos de ingresos aquí si lo deseas
-    ];
-
-    const expenses = [
-        { date: '2022-01-01', amount: 50 },
-        { date: '2022-01-02', amount: 75 },
-        { date: '2022-01-03', amount: 100 },
-        // Agrega más datos de gastos aquí si lo deseas
-    ];
+    const {incomes, expenses} = useGlobalContext()
 
     const data = {
-        labels: incomes.map((inc) => dateFormat(inc.date)),
+        labels: incomes.map((inc) =>{
+            const {date} = inc
+            return dateFormat(date)
+        }),
         datasets: [
             {
                 label: 'Income',
-                data: incomes.map((income) => income.amount),
+                data: [
+                    ...incomes.map((income) => {
+                        const {amount} = income
+                        return amount
+                    })
+                ],
                 backgroundColor: 'green',
-                tension: 0.2
+                tension: .2
             },
             {
                 label: 'Expenses',
-                data: expenses.map((expense) => expense.amount),
+                data: [
+                    ...expenses.map((expense) => {
+                        const {amount} = expense
+                        return amount
+                    })
+                ],
                 backgroundColor: 'red',
-                tension: 0.2
+                tension: .2
             }
         ]
-    };
+    }
+
 
     return (
-        <ChartStyled>
+        <ChartStyled >
             <Line data={data} />
         </ChartStyled>
-    );
+    )
 }
 
 const ChartStyled = styled.div`
@@ -57,4 +77,4 @@ const ChartStyled = styled.div`
     height: 100%;
 `;
 
-export default Chart;
+export default Chart
