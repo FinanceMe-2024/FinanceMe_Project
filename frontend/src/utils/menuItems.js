@@ -7,4 +7,10 @@ export const menuItems = [
         icon: dashboard,
         link: '/dashboard'
     },
+    {
+        id: 2,
+        title: "Transactions",
+        icon: transactions,
+        link: "/dashboard",
+    },
 ]
