@@ -4,6 +4,8 @@ import bg from './img/bg.png'
 import {MainLayout} from './styles/Layouts'
 import Navigation from './Components/Navigation/Navigation'
 import Dashboard from './Components/Dashboard/Dashboard';
+import Income from './Components/Income/Income'
+
 
 function App() {
   const [active, setActive] = useState(1)
@@ -13,6 +15,10 @@ function App() {
     switch(active){
       case 1:
         return <Dashboard />
+      case 2:
+        return <Dashboard />
+      case 3:
+        return <Income />
     }
   }
 
