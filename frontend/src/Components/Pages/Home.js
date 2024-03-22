@@ -1,31 +1,39 @@
 import React, { useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import styled from "styled-components";
 import bg from '../../img/bg.png';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { MainLayout } from './styles/Layouts';
-import Navigation from './Components/Navigation/Navigation';
-import Dashboard from './Components/Dashboard/Dashboard';
-import Income from './Components/Income/Income';
-import Login from './Components/Pages/Login';
+import { MainLayout } from '../../styles/Layouts';
+import Navigation from '../Navigation/Navigation';
+import Dashboard from '../Dashboard/Dashboard';
+import Income from '../Income/Income';
+import Login from './Login';
 
-function App() {
+function MainApp() {
   const [active, setActive] = useState(1);
 
+  const displayData = () => {
+    switch(active) {
+      case 1:
+        return <Dashboard />;
+      case 2:
+        return <Income />;
+      default: 
+        return <Dashboard />;
+    }
+  }
+
   return (
-    <Router>
-      <AppStyled bg={bg} className="App">
-        <MainLayout>
-          <Navigation active={active} setActive={setActive} />
-          <main>
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/income" element={<Income />} />
-              <Route path="/login" element={<Login />} />
-            </Routes>
-          </main>
-        </MainLayout>
-      </AppStyled>
-    </Router>
+    <AppStyled bg={bg} className="App">
+      <MainLayout>
+        <Navigation active={active} setActive={setActive} />
+        <main>
+          <Routes>
+            <Route path="/" element={displayData()} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </main>
+      </MainLayout>
+    </AppStyled>
   );
 }
 
@@ -46,4 +54,4 @@ const AppStyled = styled.div`
   }
 `;
 
-export default App;
+export default MainApp;
