@@ -1,4 +1,4 @@
-import {dashboard, trend} from '../utils/Icons'
+import {dashboard, trend,logout} from '../utils/Icons'
 
 export const menuItems = [
     {
@@ -13,4 +13,10 @@ export const menuItems = [
         icon: trend,
         link: "/dashboard",
     },
+    /*{
+        id: 3,
+        title: "Logout",
+        icon: logout,
+        link: "/dashboard",
+    },*/
 ]

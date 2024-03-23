@@ -2,8 +2,15 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import avatar from '../../img/avatar.png'
 import { menuItems } from '../../utils/menuItems'
+import { useNavigate } from 'react-router-dom'; 
 
 function Navigation({active, setActive}) {
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.removeItem('user'); 
+        navigate('/'); 
+      };
     
     return (
         <NavStyled>
@@ -16,15 +23,18 @@ function Navigation({active, setActive}) {
             </div>
             <ul className="menu-items">
                 {menuItems.map((item) => {
-                    return <li
-                        key={item.id}
-                        onClick={() => setActive(item.id)}
-                        className={active === item.id ? 'active': ''}
-                    >
-                        {item.icon}
-                        <span>{item.title}</span>
-                    </li>
+                    return (
+                        <li
+                            key={item.id}
+                            onClick={() => setActive(item.id)}
+                            className={active === item.id ? 'active': ''}
+                        >
+                            {item.icon}
+                            <span>{item.title}</span>
+                        </li>
+                    );
                 })}
+                <LogoutButton onClick={handleLogout}>Logout</LogoutButton> {/* Botón para logout */}
             </ul>
         </NavStyled>
     )
@@ -104,6 +114,18 @@ const NavStyled = styled.nav`
             border-radius: 0 10px 10px 0;
         }
     }
+`;
+
+const LogoutButton = styled.button`
+  background-color: transparent;
+  border: none; 
+  color: #222260; 
+  font-size: 16px;
+  align-items: center;
+  font-weight: bold; /* Peso de la fuente */
+  cursor: pointer; /* Cambia el cursor al pasar por encima */
+
+  }
 `;
 
 export default Navigation

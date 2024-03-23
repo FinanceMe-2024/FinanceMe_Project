@@ -1,25 +1,33 @@
 import React, { useState } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import styled from "styled-components";
 import bg from '../../img/bg.png';
 import { MainLayout } from '../../styles/Layouts';
 import Navigation from '../Navigation/Navigation';
 import Dashboard from '../Dashboard/Dashboard';
+import Login from '../Pages/Login';
 import Income from '../Income/Income';
-import Login from './Login';
+import { useAuthContext } from '../../hooks/useAuthContext'; 
 
 function MainApp() {
   const [active, setActive] = useState(1);
+  const { user } = useAuthContext(); 
 
   const displayData = () => {
-    switch(active) {
-      case 1:
-        return <Dashboard />;
-      case 2:
-        return <Income />;
-      default: 
-        return <Dashboard />;
+    if (!user) { 
+      return <Navigate to="/" />; 
     }
+
+      switch(active) {
+          case 1:
+              return <Dashboard />;
+          case 2:
+              return <Income />;
+          case 3:
+              return <Login />;
+          default: 
+              return <Dashboard />;
+      }
   }
 
   return (
@@ -27,10 +35,7 @@ function MainApp() {
       <MainLayout>
         <Navigation active={active} setActive={setActive} />
         <main>
-          <Routes>
-            <Route path="/" element={displayData()} />
-            <Route path="/login" element={<Login />} />
-          </Routes>
+          {displayData()} {}
         </main>
       </MainLayout>
     </AppStyled>
