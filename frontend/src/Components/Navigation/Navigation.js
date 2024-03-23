@@ -2,15 +2,17 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import avatar from '../../img/avatar.png'
 import { menuItems } from '../../utils/menuItems'
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
+import { useLogout } from '../../hooks/useLogout'; 
 
 function Navigation({active, setActive}) {
     const navigate = useNavigate();
+    const { logout } = useLogout(); 
 
     const handleLogout = () => {
-        localStorage.removeItem('user'); 
+        logout(); 
         navigate('/'); 
-      };
+    };
     
     return (
         <NavStyled>
@@ -34,7 +36,7 @@ function Navigation({active, setActive}) {
                         </li>
                     );
                 })}
-                <LogoutButton onClick={handleLogout}>Logout</LogoutButton> {/* Botón para logout */}
+                <LogoutButton onClick={handleLogout}>Logout</LogoutButton> {}
             </ul>
         </NavStyled>
     )
@@ -122,9 +124,9 @@ const LogoutButton = styled.button`
   color: #222260; 
   font-size: 16px;
   align-items: center;
-  font-weight: bold; /* Peso de la fuente */
-  cursor: pointer; /* Cambia el cursor al pasar por encima */
-
+  font-weight: bold; 
+  cursor: pointer; 
+  margin-top: 20px; 
   }
 `;
 

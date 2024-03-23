@@ -5,7 +5,7 @@ import axios from 'axios'
 const BASE_URL = "https://financeme-project-1.onrender.com/api/v1/";
 
 
-const GlobalContext = React.createContext()
+export const GlobalContext = React.createContext()
 
 export const GlobalProvider = ({children}) => {
 
