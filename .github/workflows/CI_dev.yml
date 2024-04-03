@@ -18,13 +18,12 @@ jobs:
 
       - name: Compile FrontEnd
         run: |
-          ls -la,
-          cd /frontend,
-          npm install,
+          cd /frontend
+          npm install
           npm run build
 
       - name: Compile BackEnd
         run: |
-          cd /backend,
-          npm run build,
+          cd /backend
+          npm run build
           npm run dev
