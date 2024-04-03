@@ -7,6 +7,7 @@ import Navigation from '../Navigation/Navigation';
 import Dashboard from '../Dashboard/Dashboard';
 import Login from '../Pages/Login';
 import Income from '../Income/Income';
+import Expenses from '../Expenses/Expenses';
 import { useAuthContext } from '../../hooks/useAuthContext'; 
 
 function MainApp() {
@@ -25,6 +26,8 @@ function MainApp() {
               return <Income />;
           case 3:
               return <Login />;
+          case 4:
+              return <Expenses />
           default: 
               return <Dashboard />;
       }
