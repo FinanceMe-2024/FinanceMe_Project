@@ -18,6 +18,7 @@ jobs:
 
       - name: Compile FrontEnd
         run: |
+          ls -la
           cd /frontend
           npm install
           npm run build
