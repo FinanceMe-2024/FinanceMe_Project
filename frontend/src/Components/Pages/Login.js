@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLogin } from "../../hooks/useLogin";
 
 const Login = () => {
@@ -40,12 +40,14 @@ const Login = () => {
         <SubmitButton disabled={isLoading}>Log in</SubmitButton>
         {error && <ErrorMessage>{error}</ErrorMessage>}
       </LoginForm>
+      <SignupLink to="/signup">Don't have an account? Sign up</SignupLink>
     </CenteredContainer>
   );
 };
 
 const CenteredContainer = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
@@ -108,5 +110,16 @@ const ErrorMessage = styled.div`
   margin-top: 10px;
 `;
 
-export default Login;
+const SignupLink = styled(Link)`
+  margin-top: 10px;
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s;
 
+  &:hover {
+    color: #0056b3;
+  }
+`;
+
+export default Login;
