@@ -20,7 +20,7 @@ jobs:
         run: |
           cd frontend
           npm install
-          npm run start
+          node ./node_modules/react-scripts/bin/react-scripts.js start
           npm run build
 
       - name: Compile BackEnd
