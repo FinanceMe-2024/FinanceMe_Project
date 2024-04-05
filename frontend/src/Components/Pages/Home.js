@@ -25,9 +25,9 @@ function MainApp() {
           case 2:
               return <Income />;
           case 3:
-             return <Expenses />;
-          case 4:
               return <Login />;
+          case 4:
+              return <Expenses />
           default: 
               return <Dashboard />;
       }

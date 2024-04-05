@@ -19,10 +19,4 @@ export const menuItems = [
         icon: expenses,
         link: "/dashboard",
     },
-    /*{
-        id: 3,
-        title: "Logout",
-        icon: logout,
-        link: "/dashboard",
-    },*/
 ]
