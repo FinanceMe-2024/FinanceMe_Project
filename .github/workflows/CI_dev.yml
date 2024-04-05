@@ -16,15 +16,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Compile FrontEnd
-        run: |
-          ls -la
-          cd frontend
-          npm install
-          npm run build
-
       - name: Compile BackEnd
         run: |
           cd backend
           npm run build
           npm run dev
+      
+      - name: Compile FrontEnd
+        run: |
+          cd frontend
+          npm install
+          node ./node_modules/react-scripts/bin/react-scripts.js start
+          npm run build
+
+      

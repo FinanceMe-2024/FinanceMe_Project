@@ -17,6 +17,15 @@ export const menuItems = [
         id: 4,
         title: "Expenses",
         icon: expenses,
+<<<<<<< HEAD
+=======
+        link: "/dashboard",
+    },
+    /*{
+        id: 3,
+        title: "Logout",
+        icon: logout,
+>>>>>>> dev
         link: "/dashboard",
     },
 ]
