@@ -3,13 +3,15 @@ const ExpenseSchema = require("../models/ExpenseModel")
 
 exports.addExpense = async (req, res) => {
     const {title, amount, category, description, date}  = req.body
+    const userId = req.user._id; 
 
     const income = ExpenseSchema({
         title,
         amount,
         category,
         description,
-        date
+        date,
+        user: userId
     })
 
     try {
@@ -30,8 +32,9 @@ exports.addExpense = async (req, res) => {
 }
 
 exports.getExpense = async (req, res) =>{
+    const userId = req.user._id;
     try {
-        const incomes = await ExpenseSchema.find().sort({createdAt: -1})
+        const incomes = await ExpenseSchema.find({ user_id: userId }).sort({ createdAt: -1 });
         res.status(200).json(incomes)
     } catch (error) {
         res.status(500).json({message: 'Server Error'})
