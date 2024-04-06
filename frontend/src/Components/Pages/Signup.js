@@ -1,18 +1,23 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { useSignup } from "../../hooks/useSignup";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { signup, error, isLoading } = useSignup();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     await signup(email,  password);
+    
+    if (!error) {
+      navigate("/"); 
+    }
   };
-
+  
   return (
     <SignupContainer>
       <SignupForm onSubmit={handleSubmit}>
