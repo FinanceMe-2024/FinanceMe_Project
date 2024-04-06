@@ -96,7 +96,7 @@ export const GlobalProvider = ({ children }) => {
             getIncomes();
             getExpenses();
         }
-    }, [user,getIncomes,getExpenses]);
+    }, []);
 
     return (
         <GlobalContext.Provider value={{
