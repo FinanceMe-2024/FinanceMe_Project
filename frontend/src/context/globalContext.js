@@ -35,7 +35,7 @@ export const GlobalProvider = ({ children }) => {
         } catch (error) {
             setError(error.message);
         }
-    }
+    };
 
     const deleteIncome = async (id) => {
         try {
@@ -61,12 +61,12 @@ export const GlobalProvider = ({ children }) => {
 
     const getExpenses = async () => {
         try {
-          const response = await axiosInstance.get("get-expenses");
-          setExpenses(response.data);
+            const response = await axiosInstance.get('get-expenses');
+            setExpenses(response.data);
         } catch (error) {
-          setError(error.message);
+            setError(error.message);
         }
-      }
+    };
 
     const deleteExpense = async (id) => {
         try {
@@ -96,7 +96,7 @@ export const GlobalProvider = ({ children }) => {
             getIncomes();
             getExpenses();
         }
-    }, [user,getIncomes,getExpenses]);
+    }, [user]);
 
     return (
         <GlobalContext.Provider value={{
