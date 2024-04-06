@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import styled from "styled-components";
 import bg from '../../img/bg.png';
 import { MainLayout } from '../../styles/Layouts';
