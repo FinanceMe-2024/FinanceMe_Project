@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import axios from 'axios';
 import { useAuthContext } from '../hooks/useAuthContext';
 
-const BASE_URL = "http://localhost:5050/api/v1/";
+const BASE_URL = "https://financeme-project-1.onrender.com/api/v1/";
 
 export const GlobalContext = React.createContext();
 
@@ -50,19 +50,19 @@ export const GlobalProvider = ({ children }) => {
         return incomes.reduce((total, income) => total + income.amount, 0);
     };
 
-    const addExpense = async (expense) => {
+    const getExpenses = async () => {
         try {
-            await axiosInstance.post('add-expense', expense);
-            getExpenses();
+            const response = await axiosInstance.get('get-expenses');
+            setExpenses(response.data);
         } catch (error) {
             setError(error.message);
         }
     };
 
-    const getExpenses = async () => {
+    const addExpense = async (expenseData) => {
         try {
-            const response = await axiosInstance.get('get-expenses');
-            setExpenses(response.data);
+            await axiosInstance.post('add-expense', expenseData);
+            getExpenses(); 
         } catch (error) {
             setError(error.message);
         }
@@ -90,13 +90,6 @@ export const GlobalProvider = ({ children }) => {
         history.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         return history.slice(0, 3);
     };
-
-    useEffect(() => {
-        if (user) {
-            getIncomes();
-            getExpenses();
-        }
-    }, [user]);
 
     return (
         <GlobalContext.Provider value={{

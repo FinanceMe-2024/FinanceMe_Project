@@ -1,102 +1,120 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
-import DatePicker from 'react-datepicker'
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { useGlobalContext } from '../../context/globalContext';
 import Button from '../Button/Button';
 import { plus } from '../../utils/Icons';
 
-
 function ExpenseForm() {
-    const {addExpense, error, setError} = useGlobalContext()
+    const { addExpense, error, setError } = useGlobalContext();
+
     const [inputState, setInputState] = useState({
         title: '',
         amount: '',
-        date: '',
+        date: new Date(),
         category: '',
         description: '',
-    })
+    });
 
-    const { title, amount, date, category,description } = inputState;
+    const { title, amount, date, category, description } = inputState;
 
     const handleInput = name => e => {
-        setInputState({...inputState, [name]: e.target.value})
-        setError('')
-    }
+        setInputState({ ...inputState, [name]: e.target.value });
+        setError(''); 
+    };
 
-    const handleSubmit = e => {
-        e.preventDefault()
-        addExpense(inputState)
-        setInputState({
-            title: '',
-            amount: '',
-            date: '',
-            category: '',
-            description: '',
-        })
-    }
+    const handleSubmit = async e => {
+        e.preventDefault();
+
+        if (!title || !amount || !date || !category || !description) {
+            setError('All fields are required');
+            return;
+        }
+
+        try {
+            await addExpense(inputState);
+            setInputState({
+                title: '',
+                amount: '',
+                date: new Date(),
+                category: '',
+                description: '',
+            });
+        } catch (error) {
+            setError(error.message);
+        }
+    };
 
     return (
         <ExpenseFormStyled onSubmit={handleSubmit}>
             {error && <p className='error'>{error}</p>}
             <div className="input-control">
-                <input 
-                    type="text" 
+                <input
+                    type="text"
                     value={title}
-                    name={'title'} 
+                    name='title'
                     placeholder="Expense Title"
                     onChange={handleInput('title')}
+                    required
                 />
             </div>
             <div className="input-control">
-                <input value={amount}  
-                    type="text" 
-                    name={'amount'} 
-                    placeholder={'Expense Amount'}
-                    onChange={handleInput('amount')} 
+                <input
+                    type="text"
+                    value={amount}
+                    name='amount'
+                    placeholder="Expense Amount"
+                    onChange={handleInput('amount')}
+                    required
                 />
             </div>
             <div className="input-control">
-                <DatePicker 
-                    id='date'
-                    placeholderText='Enter A Date'
+                <DatePicker
                     selected={date}
+                    onChange={date => setInputState({ ...inputState, date })}
                     dateFormat="dd/MM/yyyy"
-                    onChange={(date) => {
-                        setInputState({...inputState, date: date})
-                    }}
                 />
             </div>
             <div className="selects input-control">
-                <select required value={category} name="category" id="category" onChange={handleInput('category')}>
-                    <option value="" disabled >Select Option</option>
+                <select
+                    value={category}
+                    name="category"
+                    onChange={handleInput('category')}
+                    required
+                >
+                    <option value="">Select Option</option>
                     <option value="education">Education</option>
                     <option value="groceries">Groceries</option>
                     <option value="health">Health</option>
                     <option value="subscriptions">Subscriptions</option>
                     <option value="takeaways">Takeaways</option>
-                    <option value="clothing">Clothing</option>  
-                    <option value="travelling">Travelling</option>  
-                    <option value="other">Other</option>  
+                    <option value="clothing">Clothing</option>
+                    <option value="travelling">Travelling</option>
+                    <option value="other">Other</option>
                 </select>
             </div>
             <div className="input-control">
-                <textarea name="description" value={description} placeholder='Add A Reference' id="description" cols="30" rows="4" onChange={handleInput('description')}></textarea>
+                <textarea
+                    value={description}
+                    name="description"
+                    placeholder="Add A Reference"
+                    onChange={handleInput('description')}
+                ></textarea>
             </div>
             <div className="submit-btn">
-                <Button 
-                    name={'Add Expense'}
+                <Button
+                    name='Add Expense'
                     icon={plus}
-                    bPad={'.8rem 1.6rem'}
-                    bRad={'30px'}
-                    bg={'var(--color-accent'}
-                    color={'#fff'}
+                    bPad='.8rem 1.6rem'
+                    bRad='30px'
+                    bg='var(--color-accent)'
+                    color='#fff'
                 />
             </div>
         </ExpenseFormStyled>
-    )
+    );
 }
-
 
 const ExpenseFormStyled = styled.form`
     display: flex;
