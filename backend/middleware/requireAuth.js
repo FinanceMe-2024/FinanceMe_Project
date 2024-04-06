@@ -1,4 +1,3 @@
-// Middleware de autenticación
 const jwt = require('jsonwebtoken');
 const User = require('../models/UserModel');
 
