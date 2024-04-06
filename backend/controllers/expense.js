@@ -3,7 +3,6 @@ const ExpenseSchema = require("../models/ExpenseModel")
 
 exports.addExpense = async (req, res) => {
     const {title, amount, category, description, date}  = req.body
-    const userId = req.user._id; 
 
     const income = ExpenseSchema({
         title,
@@ -11,7 +10,6 @@ exports.addExpense = async (req, res) => {
         category,
         description,
         date,
-        user: userId
     })
 
     try {
