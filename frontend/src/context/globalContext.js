@@ -28,14 +28,14 @@ export const GlobalProvider = ({ children }) => {
         }
     };
 
-    const getIncomes = async () => {
+    const getIncomes = useCallback(async () => {
         try {
             const response = await axiosInstance.get('get-incomes');
             setIncomes(response.data);
         } catch (error) {
             setError(error.message);
         }
-    };
+    },[axiosInstance, setIncomes, setError])
 
     const deleteIncome = async (id) => {
         try {
@@ -59,14 +59,14 @@ export const GlobalProvider = ({ children }) => {
         }
     };
 
-    const getExpenses = async () => {
+    const getExpenses = setCallback(async () => {
         try {
             const response = await axiosInstance.get('get-expenses');
             setExpenses(response.data);
         } catch (error) {
             setError(error.message);
         }
-    };
+    },[axiosInstance, setExpenses, setError])
 
     const deleteExpense = async (id) => {
         try {
@@ -96,7 +96,7 @@ export const GlobalProvider = ({ children }) => {
             getIncomes();
             getExpenses();
         }
-    }, []);
+    }, [user,getIncomes,getExpenses]);
 
     return (
         <GlobalContext.Provider value={{
