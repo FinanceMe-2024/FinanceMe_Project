@@ -4,22 +4,31 @@ import avatar from '../../img/avatar.png'
 import { menuItems } from '../../utils/menuItems'
 import { useNavigate } from 'react-router-dom';
 import { useLogout } from '../../hooks/useLogout'; 
+import { useAuthContext } from '../../hooks/useAuthContext';
 
 function Navigation({active, setActive}) {
     const navigate = useNavigate();
     const { logout } = useLogout(); 
+    const authContext = useAuthContext(useAuthContext);
 
     const handleLogout = () => {
         logout(); 
         navigate('/'); 
     };
     
+    const userEmail = authContext.user ? authContext.user.email : '';
+    const getUsernameFromEmail = (email) => {
+        const atIndex = email.indexOf('@');
+        return email.substring(0, atIndex);
+    };
+    const userName = getUsernameFromEmail(userEmail);
+
     return (
         <NavStyled>
             <div className="user-con">
                 <img src={avatar} alt="" />
                 <div className="text">
-                    <h2>Mike</h2>
+                    <h2>{userName}</h2>
                     <p>Your Money</p>
                 </div>
             </div>
