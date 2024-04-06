@@ -3,6 +3,7 @@ const Income= require("../models/IncomeModel")
 
 exports.addIncome = async (req, res) => {
     const {title, amount, category, description, date}  = req.body
+    const userId = req.user._id; 
 
     const newIncome = new Income({
         title,
@@ -10,6 +11,7 @@ exports.addIncome = async (req, res) => {
         category,
         description,
         date,
+        user: userId
     })
 
     try {

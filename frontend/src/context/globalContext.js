@@ -1,17 +1,15 @@
-import React, { useContext, useState, useEffect } from "react";
-import axios from 'axios';
-import { useAuthContext } from '../hooks/useAuthContext';
+import React, { useContext, useState } from "react"
+import axios from 'axios'
+
 
 const BASE_URL = "https://financeme-project-1.onrender.com/api/v1/";
 
-export const GlobalContext = React.createContext();
 
-export const GlobalProvider = ({ children }) => {
-    const { user } = useAuthContext();
-    const [incomes, setIncomes] = useState([]);
-    const [expenses, setExpenses] = useState([]);
-    const [error, setError] = useState(null);
+export const GlobalContext = React.createContext()
 
+export const GlobalProvider = ({children}) => {
+
+<<<<<<< HEAD
     useEffect(() => {
         const axiosInstance = axios.create({
             baseURL: BASE_URL,
@@ -40,8 +38,15 @@ export const GlobalProvider = ({ children }) => {
             // Cleanup function if needed
         };
     }, [user]);
+=======
+    const [incomes, setIncomes] = useState([])
+    const [expenses, setExpenses] = useState([])
+    const [error, setError] = useState(null)
+>>>>>>> parent of b2d7da24 (POR FINNNNNNNNNNNNNNNNNNNN)
 
+    //calculate incomes
     const addIncome = async (income) => {
+<<<<<<< HEAD
         try {
             const axiosInstance = axios.create({
                 baseURL: BASE_URL,
@@ -140,20 +145,86 @@ export const GlobalProvider = ({ children }) => {
             setError(error.message);
         }
     };
+=======
+        const response = await axios.post(`${BASE_URL}add-income`, income)
+            .catch((err) =>{
+                setError(err.response.data.message)
+            })
+        getIncomes()
+    }
+
+    const getIncomes = async () => {
+        const response = await axios.get(`${BASE_URL}get-incomes`)
+        setIncomes(response.data)
+        console.log(response.data)
+    }
+
+    const deleteIncome = async (id) => {
+        const res  = await axios.delete(`${BASE_URL}delete-income/${id}`)
+        getIncomes()
+    }
+
+    const totalIncome = () => {
+        let totalIncome = 0;
+        incomes.forEach((income) =>{
+            totalIncome = totalIncome + income.amount
+        })
+
+        return totalIncome;
+    }
+
+
+    //calculate incomes
+    const addExpense = async (income) => {
+        const response = await axios.post(`${BASE_URL}add-expense`, income)
+            .catch((err) =>{
+                setError(err.response.data.message)
+            })
+        getExpenses()
+    }
+
+    const getExpenses = async () => {
+        const response = await axios.get(`${BASE_URL}get-expenses`)
+        setExpenses(response.data)
+        console.log(response.data)
+    }
+
+    const deleteExpense = async (id) => {
+        const res  = await axios.delete(`${BASE_URL}delete-expense/${id}`)
+        getExpenses()
+    }
+>>>>>>> parent of b2d7da24 (POR FINNNNNNNNNNNNNNNNNNNN)
 
     const totalExpenses = () => {
-        return expenses.reduce((total, expense) => total + expense.amount, 0);
-    };
+        let totalIncome = 0;
+        expenses.forEach((income) =>{
+            totalIncome = totalIncome + income.amount
+        })
+
+        return totalIncome;
+    }
+
 
     const totalBalance = () => {
-        return totalIncome() - totalExpenses();
-    };
+        return totalIncome() - totalExpenses()
+    }
 
     const transactionHistory = () => {
+<<<<<<< HEAD
         const history = [...incomes, ...expenses];
         history.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         return history.slice(0, 3);
     };
+=======
+        const history = [...incomes, ...expenses]
+        history.sort((a, b) => {
+            return new Date(b.createdAt) - new Date(a.createdAt)
+        })
+
+        return history.slice(0, 3)
+    }
+
+>>>>>>> parent of b2d7da24 (POR FINNNNNNNNNNNNNNNNNNNN)
 
     return (
         <GlobalContext.Provider value={{
@@ -174,9 +245,9 @@ export const GlobalProvider = ({ children }) => {
         }}>
             {children}
         </GlobalContext.Provider>
-    );
-};
+    )
+}
 
-export const useGlobalContext = () => {
-    return useContext(GlobalContext);
-};
+export const useGlobalContext = () =>{
+    return useContext(GlobalContext)
+}
