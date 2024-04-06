@@ -12,15 +12,44 @@ export const GlobalProvider = ({ children }) => {
     const [expenses, setExpenses] = useState([]);
     const [error, setError] = useState(null);
 
-    const axiosInstance = axios.create({
-        baseURL: BASE_URL,
-        headers: {
-            'Authorization': `Bearer ${user ? user.token : ''}`,
-        },
-    });
+    useEffect(() => {
+        const axiosInstance = axios.create({
+            baseURL: BASE_URL,
+            headers: {
+                'Authorization': user ? `Bearer ${user.token}` : '',
+            },
+        });
+
+        const fetchData = async () => {
+            try {
+                const incomesResponse = await axiosInstance.get('get-incomes');
+                setIncomes(incomesResponse.data);
+
+                const expensesResponse = await axiosInstance.get('get-expenses');
+                setExpenses(expensesResponse.data);
+            } catch (error) {
+                setError(error.message);
+            }
+        };
+
+        if (user) {
+            fetchData();
+        }
+
+        return () => {
+            // Cleanup function if needed
+        };
+    }, [user]);
 
     const addIncome = async (income) => {
         try {
+            const axiosInstance = axios.create({
+                baseURL: BASE_URL,
+                headers: {
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
             await axiosInstance.post('add-income', income);
             getIncomes();
         } catch (error) {
@@ -30,6 +59,13 @@ export const GlobalProvider = ({ children }) => {
 
     const getIncomes = async () => {
         try {
+            const axiosInstance = axios.create({
+                baseURL: BASE_URL,
+                headers: {
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
             const response = await axiosInstance.get('get-incomes');
             setIncomes(response.data);
         } catch (error) {
@@ -39,6 +75,13 @@ export const GlobalProvider = ({ children }) => {
 
     const deleteIncome = async (id) => {
         try {
+            const axiosInstance = axios.create({
+                baseURL: BASE_URL,
+                headers: {
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
             await axiosInstance.delete(`delete-income/${id}`);
             getIncomes();
         } catch (error) {
@@ -52,6 +95,13 @@ export const GlobalProvider = ({ children }) => {
 
     const addExpense = async (expense) => {
         try {
+            const axiosInstance = axios.create({
+                baseURL: BASE_URL,
+                headers: {
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
             await axiosInstance.post('add-expense', expense);
             getExpenses();
         } catch (error) {
@@ -61,6 +111,13 @@ export const GlobalProvider = ({ children }) => {
 
     const getExpenses = async () => {
         try {
+            const axiosInstance = axios.create({
+                baseURL: BASE_URL,
+                headers: {
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
             const response = await axiosInstance.get('get-expenses');
             setExpenses(response.data);
         } catch (error) {
@@ -70,6 +127,13 @@ export const GlobalProvider = ({ children }) => {
 
     const deleteExpense = async (id) => {
         try {
+            const axiosInstance = axios.create({
+                baseURL: BASE_URL,
+                headers: {
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
             await axiosInstance.delete(`delete-expense/${id}`);
             getExpenses();
         } catch (error) {
@@ -90,13 +154,6 @@ export const GlobalProvider = ({ children }) => {
         history.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         return history.slice(0, 3);
     };
-
-    useEffect(() => {
-        if (user) {
-            getIncomes();
-            getExpenses();
-        }
-    }, [user]);
 
     return (
         <GlobalContext.Provider value={{
