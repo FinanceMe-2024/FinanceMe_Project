@@ -19,7 +19,7 @@ const requireAuth = async (req, res, next) => {
             throw new Error('User not found');
         }
 
-        req.user = user; // Almacenar el usuario en el objeto de solicitud para su posterior uso
+        req.user = user; 
         next();
 
     } catch (error) {
