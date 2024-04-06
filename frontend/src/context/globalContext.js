@@ -59,14 +59,14 @@ export const GlobalProvider = ({ children }) => {
         }
     };
 
-    const getExpenses = setCallback(async () => {
+    const getExpenses = useCallback(async () => {
         try {
-            const response = await axiosInstance.get('get-expenses');
-            setExpenses(response.data);
+          const response = await axiosInstance.get("get-expenses");
+          setExpenses(response.data);
         } catch (error) {
-            setError(error.message);
+          setError(error.message);
         }
-    },[axiosInstance, setExpenses, setError])
+      }, [axiosInstance, setExpenses, setError]);
 
     const deleteExpense = async (id) => {
         try {
