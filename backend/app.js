@@ -11,7 +11,9 @@ const PORT = process.env.PORT
 
 //middlewares
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+    origin: 'https://dev--finance-me-2024.netlify.app'
+  }));
 
 //routes
 readdirSync('./routes').map((route) => app.use('/api/v1', require('./routes/' + route)))
