@@ -1,31 +1,38 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
-import { useLogin } from "../../hooks/useLogin";
+import { Link } from "react-router-dom";
+import { useSignup } from "../../hooks/useSignup";
 
-const Login = () => {
+const Signup = () => {
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState("");
-  const { login, error, isLoading } = useLogin();
-  const navigate = useNavigate();
+  const { signup, error, isLoading } = useSignup();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await login(email, password);
-    navigate("/app/*"); 
+    await signup(email, username, password);
   };
 
   return (
-    <CenteredContainer>
-      <LoginForm onSubmit={handleSubmit}>
-        <h2>Login</h2>
+    <SignupContainer>
+      <SignupForm onSubmit={handleSubmit}>
+        <h2>Sign Up</h2>
         <FormField>
           <label>Email address:</label>
           <input
             type="email"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
-            placeholder="Enter your email"
+          />
+        </FormField>
+        <FormField>
+          <label>Username:</label>
+          <input
+            type="text"
+            onChange={(e) => setUsername(e.target.value)}
+            value={username}
+            required
           />
         </FormField>
         <FormField>
@@ -34,18 +41,17 @@ const Login = () => {
             type="password"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
-            placeholder="Enter your password"
           />
         </FormField>
-        <SubmitButton disabled={isLoading}>Log in</SubmitButton>
+        <SubmitButton disabled={isLoading}>Sign up</SubmitButton>
         {error && <ErrorMessage>{error}</ErrorMessage>}
-      </LoginForm>
-      <SignupLink to="/signup">Don't have an account? Sign up</SignupLink>
-    </CenteredContainer>
+      </SignupForm>
+      <LoginLink to="/">Already have an account? Login here.</LoginLink>
+    </SignupContainer>
   );
 };
 
-const CenteredContainer = styled.div`
+const SignupContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -53,7 +59,7 @@ const CenteredContainer = styled.div`
   height: 100vh;
 `;
 
-const LoginForm = styled.form`
+const SignupForm = styled.form`
   width: 300px;
   padding: 20px;
   border-radius: 8px;
@@ -110,16 +116,16 @@ const ErrorMessage = styled.div`
   margin-top: 10px;
 `;
 
-const SignupLink = styled(Link)`
-  margin-top: 10px;
-  color: #007bff;
-  text-decoration: none;
-  font-weight: bold;
-  transition: color 0.3s;
+const LoginLink = styled(Link)`
+margin-top: 10px;
+color: #007bff;
+text-decoration: none;
+font-weight: bold;
+transition: color 0.3s;
 
-  &:hover {
-    color: #0056b3;
-  }
+&:hover {
+  color: #0056b3;
+}
 `;
 
-export default Login;
+export default Signup;
