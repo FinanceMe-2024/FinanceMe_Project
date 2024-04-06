@@ -5,13 +5,12 @@ import { useSignup } from "../../hooks/useSignup";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
-  const [username, setUsername] = useState('');
   const [password, setPassword] = useState("");
   const { signup, error, isLoading } = useSignup();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await signup(email, username, password);
+    await signup(email,  password);
   };
 
   return (
@@ -24,15 +23,6 @@ const Signup = () => {
             type="email"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
-          />
-        </FormField>
-        <FormField>
-          <label>Username:</label>
-          <input
-            type="text"
-            onChange={(e) => setUsername(e.target.value)}
-            value={username}
-            required
           />
         </FormField>
         <FormField>
