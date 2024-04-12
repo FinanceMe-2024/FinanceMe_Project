@@ -9,13 +9,12 @@ describe('Expense Controller', () => {
         amount: 100,
         category: 'Food',
         description: 'Test expense description',
-        date: '2022-01-01',
-        userId: '1'
+        date: '2024-04-08T05:00:00.000Z',
+        userId: '65fdf9aa8abacb09e060bbae'
       };
 
-      const response = await request("https://financeme-project-1.onrender.com/api/v1/get-expenses")
-        .post('/api/expense')
-        .send(expenseData);
+      const response = await request("https://financeme-project-1.onrender.com/api/v1/add-expense")
+        .post(expenseData);
 
       expect(response.statusCode).toBe(200);
       expect(response.body).toHaveProperty('message', 'Expense Added');
@@ -26,13 +25,12 @@ describe('Expense Controller', () => {
         amount: 50,
         category: 'Alimentos',
         description: 'Gasto en almuerzo',
-        date: '2022-01-01',
-        userId: '1'
+        date: '2024-04-08T05:00:00.000Z',
+        userId: '65fdf9aa8abacb09e060bbae'
       };
 
-      const response = await request("https://financeme-project-1.onrender.com/api/v1/get-expenses")
-        .post('/api/expense')
-        .send(incompleteExpense);
+      const response = await request("https://financeme-project-1.onrender.com/api/v1/add-expense")
+        .post(incompleteExpense);
 
       expect(response.statusCode).toBe(400);
       expect(response.body).toHaveProperty('message', 'All fields are required!');
@@ -44,13 +42,12 @@ describe('Expense Controller', () => {
         amount: -50,
         category: 'Alimentos',
         description: 'Gasto en almuerzo',
-        date: '2022-01-01',
-        userId: '1'
+        date: '2024-04-08T05:00:00.000Z',
+        userId: '65fdf9aa8abacb09e060bbae'
       };
 
-      const response = await request("https://financeme-project-1.onrender.com/api/v1/get-expenses")
-        .post('/api/expense')
-        .send(invalidExpense);
+      const response = await request("https://financeme-project-1.onrender.com/api/v1/add-expense")
+        .post(invalidExpense);
 
       expect(response.statusCode).toBe(400);
       expect(response.body).toHaveProperty('message', 'Amount must be a positive number!');
@@ -62,13 +59,12 @@ describe('Expense Controller', () => {
         amount: 'invalid',
         category: 'Alimentos',
         description: 'Gasto en almuerzo',
-        date: '2022-01-01',
-        userId: '1'
+        date: '2024-04-08T05:00:00.000Z',
+        userId: '65fdf9aa8abacb09e060bbae'
       };
 
-      const response = await request("https://financeme-project-1.onrender.com/api/v1/get-expenses")
-        .post('/api/expense')
-        .send(invalidExpense);
+      const response = await request("https://financeme-project-1.onrender.com/api/v1/add-expense")
+        .post(invalidExpense);
 
       expect(response.statusCode).toBe(400);
       expect(response.body).toHaveProperty('message', 'Amount must be a number!');
@@ -84,8 +80,8 @@ describe('Expense Controller', () => {
         amount: 100,
         category: 'Food',
         description: 'Test expense description',
-        date: '2022-01-01',
-        user: userId
+        date: '2024-04-08T05:00:00.000Z',
+        user: '65fdf9aa8abacb09e060bbae'
       });
 
       await expense.save();
@@ -113,13 +109,13 @@ describe('Expense Controller', () => {
         amount: 100,
         category: 'Food',
         description: 'Test expense description',
-        date: '2022-01-01',
-        user: '3'
+        date: '2024-04-08T05:00:00.000Z',
+        user: '65fdf9aa8abacb09e060bbae'
       });
     
       await expense.save();
     
-      const response = await request("https://financeme-project-1.onrender.com/api/v1/get-expenses")
+      const response = await request("https://financeme-project-1.onrender.com/api/v1/delete-expense")
         .delete(`/api/expense/${expense._id}`)
         .set('user_id', '1');
     
