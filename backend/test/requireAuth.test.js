@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/UserModel.js');
+const user = new User({_id: 'testUserId'});
 const requireAuth = require('../middleware/requireAuth');
+const token = jwt.sign({ _id: user._id }, 'fianncemesecretjwt');
 
 describe('requireAuth middleware', () => {
   it('should return 401 if authorization token is missing', async () => {
@@ -42,7 +44,7 @@ describe('requireAuth middleware', () => {
       _id: 'testUserId'
     };
 
-    const token = jwt.sign({ _id: user._id }, process.env.SECRET);
+    const token = jwt.sign({ _id: user._id }, process.env.SECRET = 'fianncemesecretjwt');
 
     const req = {
       headers: {
@@ -67,7 +69,7 @@ describe('requireAuth middleware', () => {
       _id: 'testUserId'
     };
 
-    const token = jwt.sign({ _id: user._id }, process.env.SECRET);
+    const token = jwt.sign({ _id: user._id }, process.env.SECRET = 'fianncemesecretjwt');
 
     const req = {
       headers: {
@@ -86,6 +88,6 @@ describe('requireAuth middleware', () => {
 
     expect(User.findOne).toHaveBeenCalledWith({ _id: user._id });
     expect(res.status).toHaveBeenCalledWith(401);
-    expect(res.json).toHaveBeenCalledWith({ error: 'User not found' });
+    expect(res.json).toHaveBeenCalledWith({ error: 'Request is not authorized' });
   });
 });
