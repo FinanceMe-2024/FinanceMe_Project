@@ -73,7 +73,7 @@ describe('Transactions API Endpoints', () => {
   it('should return an error if amount is not a number', async () => {
     const invalidExpense = {
       title: 'Rent',
-      amount: '1200',
+      amount: 'asdasd',
       category: 'Housing',
       description: 'Monthly rent payment',
       date: '2024-04-30'
@@ -85,7 +85,7 @@ describe('Transactions API Endpoints', () => {
       .send(invalidExpense);
 
     expect(response.statusCode).toBe(400);
-    expect(response.body.message).toBe('Amount must be a number!');
+    expect(response.body.message).toBe('Amount must be a positive number!');
   });
 
   it('should get all expenses', async () => {
