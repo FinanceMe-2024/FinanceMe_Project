@@ -1,7 +1,7 @@
 const request = require('supertest');
 const Income = require('../models/IncomeModel');
 
-const baseURL = 'https://financeme-project-1.onrender.com/api/v1';
+const baseURL = 'http://localhost:5050/api/v1';
 
 describe('Transactions API Endpoints', () => {
   let authToken; 
@@ -10,7 +10,7 @@ describe('Transactions API Endpoints', () => {
     const loginResponse = await request(baseURL)
       .post('/login') 
       .send({
-        email: 'finance@gmail.com',
+        email: 'financee@gmail.com',
         password: 'Finance1.'
       });
 
