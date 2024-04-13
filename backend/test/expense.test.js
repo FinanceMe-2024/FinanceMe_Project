@@ -1,7 +1,7 @@
 const request = require('supertest');
 const Expense = require('../models/ExpenseModel');
 
-const baseURL = 'http://localhost:5050/api/v1';
+const baseURL = 'https://financeme-project-1.onrender.com/api/v1';
 
 describe('Transactions API Endpoints', () => {
   let authToken;
