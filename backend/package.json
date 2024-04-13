@@ -47,6 +47,7 @@
       "**/*.js"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "setupFiles": ["dotenv/config"]
   }
 }
