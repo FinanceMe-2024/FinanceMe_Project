@@ -86,7 +86,7 @@ describe('Transactions API Endpoints', () => {
       .send(invalidIncome);
   
     expect(response.statusCode).toBe(400);
-    expect(response.body).toHaveProperty('message', 'Amount must be a number!');
+    expect(response.body).toHaveProperty('message', 'Amount must be a positive number!');
   });
 
   it('should get all incomes', async () => {
