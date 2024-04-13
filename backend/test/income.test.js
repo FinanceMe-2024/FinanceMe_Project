@@ -1,8 +1,7 @@
 const request = require('supertest');
 const Income = require('../models/IncomeModel');
 
-// URL de tu servicio desplegado
-const baseURL = 'https://financeme-project-1.onrender.com/api/v1';
+const baseURL = 'http://localhost:5050/api/v1';
 
 describe('Transactions API Endpoints', () => {
   let authToken; 
@@ -123,16 +122,5 @@ describe('Transactions API Endpoints', () => {
   
     expect(deleteResponse.status).toBe(200);
     expect(deleteResponse.body.message).toBe('Income Deleted');
-  });
-  it('should delete an income with the id', async () => {
-    // Este es macheteado, creoq ue deberia ser como la de arriba
-    const incomeIdToDelete = '661a0f4d6e1511c3d4e09cbf';
-
-    const response = await request(baseURL)
-      .delete(`/delete-income/${incomeIdToDelete}`)
-      .set('Authorization', `Bearer ${authToken}`);
-
-    expect(response.status).toBe(200);
-    expect(response.body.message).toBe('Income Deleted');
   });
 });
