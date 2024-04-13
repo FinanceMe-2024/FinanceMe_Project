@@ -1,4 +1,4 @@
-const ExpenseSchema = require("../models/ExpenseModel")
+const Expense = require("../models/ExpenseModel")
 
 exports.addExpense = async (req, res) => {
     const {title, amount, category, description, date}  = req.body
@@ -34,7 +34,7 @@ exports.addExpense = async (req, res) => {
 exports.getExpense = async (req, res) =>{
     const userId = req.user._id;
     try {
-        const incomes = await ExpenseSchema.find({ user_id: userId }).sort({ createdAt: -1 });
+        const incomes = await Expense.find({ user_id: userId }).sort({ createdAt: -1 });
         res.status(200).json(incomes)
     } catch (error) {
         res.status(500).json({message: 'Server Error'})
@@ -45,7 +45,7 @@ exports.deleteExpense = async (req, res) =>{
     const {id} = req.params;
     const userId = req.user._id;
     try {
-        const income = await Income.findById(id);
+        const income = await Expense.findById(id);
         if (!income) {
             return res.status(404).json({ message: 'Expense not found' });
         }
