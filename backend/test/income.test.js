@@ -74,7 +74,7 @@ describe('Transactions API Endpoints', () => {
   it('should return an error if amount is not a number', async () => {
     const invalidIncome = {
       title: 'Salary',
-      amount: '3000', 
+      amount: 'asdasd', 
       category: 'Job',
       description: 'Monthly salary',
       date: '2024-04-15'
