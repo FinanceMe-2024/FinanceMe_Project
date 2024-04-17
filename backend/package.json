@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "dev": "node app.js",
-    "build": "npm i"
+    "build": "npm i",
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
@@ -19,5 +20,34 @@
     "mongoose": "^6.9.1",
     "nodemon": "^2.0.20",
     "validator": "^13.11.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.4"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js"
+    ],
+    "rootDir": "test/",
+    "testRegex": "test/.*\\.test\\.js$",
+    "verbose": true,
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 90,
+        "functions": 90,
+        "lines": 90,
+        "statements": 90
+      }
+    },
+    "collectCoverageFrom": [
+      "**/*.js"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node",
+    "setupFiles": ["dotenv/config"]
   }
 }
