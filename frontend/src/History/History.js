@@ -11,9 +11,9 @@ function History() {
             <h2>Recent History</h2>
             {history.map((item) => {
                 const { _id, title, amount, type } = item;
-                const amountValue = Math.abs(amount).toFixed(2); // Valor absoluto del monto con 2 decimales
-                const sign = type === 'income' ? '+' : '-'; // Signo '-' para gastos (expense) y '+' para ingresos (income)
-                const color = type === 'income' ? 'green' : 'red'; // Color rojo para gastos y verde para ingresos
+                const amountValue = Math.abs(amount).toFixed(); 
+                const sign = type === 'income' ? '+' : '-'; 
+                const color = type === 'income' ? 'green' : 'red'; 
                 
                 return (
                     <div key={_id} className="history-item">
