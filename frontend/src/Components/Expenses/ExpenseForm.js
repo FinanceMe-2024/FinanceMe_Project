@@ -27,12 +27,7 @@ function ExpenseForm() {
         e.preventDefault();
 
         const amountValue = parseFloat(amount);
-        if (isNaN(amountValue)) {
-            setError('Amount must be a number');
-            return;
-        }
-
-        if (amountValue <= 0) {
+        if (isNaN(amountValue) || amountValue <= 0) {
             setError('Amount must be a positive number');
             return;
         }
