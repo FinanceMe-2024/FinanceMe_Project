@@ -9,13 +9,14 @@ exports.addIncome = async (req, res) => {
             return res.status(400).json({ message: 'All fields are required!' });
         }
 
-        if (typeof amount !== 'number' || isNaN(amount) || amount <= 0 || !/^\d+(\.\d+)?$/.test(amount)) {
+        const amountValue = parseFloat(amount);
+        if (isNaN(amountValue) || amountValue <= 0) {
             return res.status(400).json({ message: 'Amount must be a positive number!' });
         }
 
         const newIncome = new Income({
             title,
-            amount,
+            amount: amountValue,
             category,
             description,
             date,

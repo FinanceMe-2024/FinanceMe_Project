@@ -9,13 +9,14 @@ exports.addExpense = async (req, res) => {
             return res.status(400).json({ message: 'All fields are required!' });
         }
 
-        if (typeof amount !== 'number' || isNaN(amount) || amount <= 0 || !/^\d+(\.\d+)?$/.test(amount)) {
+        const amountValue = parseFloat(amount);
+        if (isNaN(amountValue) || amountValue <= 0) {
             return res.status(400).json({ message: 'Amount must be a positive number!' });
         }
 
         const newExpense = new Expense({
             title,
-            amount,
+            amount: amountValue,
             category,
             description,
             date,
@@ -34,7 +35,7 @@ exports.addExpense = async (req, res) => {
 exports.getExpense = async (req, res) =>{
     const userId = req.user._id;
     try {
-        const incomes = await Expense.find({ user_id: userId }).sort({ createdAt: -1 });
+        const incomes = await Expense.find({ user: userId }).sort({ createdAt: -1 });
         res.status(200).json(incomes)
     } catch (error) {
         res.status(500).json({message: 'Server Error'})

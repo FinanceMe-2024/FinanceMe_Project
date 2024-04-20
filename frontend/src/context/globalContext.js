@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import axios from 'axios';
 import { useAuthContext } from '../hooks/useAuthContext';
 
-const BASE_URL = "https://financeme-project-1.onrender.com/api/v1/";
+const BASE_URL = "http://localhost:5050/api/v1/";
 
 export const GlobalContext = React.createContext();
 
