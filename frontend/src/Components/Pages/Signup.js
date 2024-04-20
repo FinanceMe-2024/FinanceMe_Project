@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { useSignup } from "../../hooks/useSignup";
@@ -37,13 +37,12 @@ const Signup = () => {
       setPasswordError("");
     }
 
-    // Si no hay errores en email y password, intentar el registro
     if (!emailError && !passwordError) {
       try {
         const response = await signup(email, password);
 
         if (response.success) {
-          navigate("/"); // Redirigir después del registro exitoso
+          navigate("/"); 
         }
       } catch (error) {
         if (error.response && error.response.status === 409) {
@@ -54,6 +53,12 @@ const Signup = () => {
       }
     }
   };
+
+  useEffect(() => {
+    setEmailError("");
+    setPasswordError("");
+    setSignupError("");
+  }, [email, password]);
 
   return (
     <SignupContainer>
