@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSignup } from "../../hooks/useSignup";
+import validator from "validator";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -9,15 +10,51 @@ const Signup = () => {
   const { signup, error, isLoading } = useSignup();
   const navigate = useNavigate();
 
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [signupError, setSignupError] = useState("");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await signup(email,  password);
-    
-    if (!error) {
-      navigate("/"); 
+
+    // Validación del email
+    if (!email) {
+      setEmailError("Please enter your email");
+    } else if (!validator.isEmail(email)) {
+      setEmailError("Please enter a valid email address");
+    } else {
+      setEmailError("");
+    }
+
+    // Validación de la contraseña
+    if (!password) {
+      setPasswordError("Please enter your password");
+    } else if (!validator.isStrongPassword(password)) {
+      setPasswordError(
+        "Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one number, and one special character"
+      );
+    } else {
+      setPasswordError("");
+    }
+
+    // Si no hay errores en email y password, intentar el registro
+    if (!emailError && !passwordError) {
+      try {
+        const response = await signup(email, password);
+
+        if (response.success) {
+          navigate("/"); // Redirigir después del registro exitoso
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 409) {
+          setSignupError("This email is already registered");
+        } else {
+          console.error("Signup failed:", error);
+        }
+      }
     }
   };
-  
+
   return (
     <SignupContainer>
       <SignupForm onSubmit={handleSubmit}>
@@ -29,6 +66,7 @@ const Signup = () => {
             onChange={(e) => setEmail(e.target.value)}
             value={email}
           />
+          {emailError && <ErrorMessage>{emailError}</ErrorMessage>}
         </FormField>
         <FormField>
           <label>Password:</label>
@@ -37,8 +75,10 @@ const Signup = () => {
             onChange={(e) => setPassword(e.target.value)}
             value={password}
           />
+          {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
         </FormField>
         <SubmitButton disabled={isLoading}>Sign up</SubmitButton>
+        {signupError && <ErrorMessage>{signupError}</ErrorMessage>}
         {error && <ErrorMessage>{error}</ErrorMessage>}
       </SignupForm>
       <LoginLink to="/">Already have an account? Login here.</LoginLink>
@@ -105,22 +145,21 @@ const SubmitButton = styled.button`
   }
 `;
 
-const ErrorMessage = styled.div`
-  color: red;
-  font-size: 14px;
+const ErrorMessage = styled.p`
   margin-top: 10px;
+  color: red;
 `;
 
 const LoginLink = styled(Link)`
-margin-top: 10px;
-color: #007bff;
-text-decoration: none;
-font-weight: bold;
-transition: color 0.3s;
+  margin-top: 10px;
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s;
 
-&:hover {
-  color: #0056b3;
-}
+  &:hover {
+    color: #0056b3;
+  }
 `;
 
 export default Signup;
