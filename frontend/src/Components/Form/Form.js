@@ -24,17 +24,41 @@ function Form() {
         setError('')
     }
 
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
         e.preventDefault()
-        addIncome(inputState)
-        setInputState({
-            title: '',
-            amount: '',
-            date: new Date(),
-            category: '',
-            description: '',
-        })
-    }
+        const amountValue = parseFloat(amount);
+        if (isNaN(amountValue)) {
+            setError('Amount must be a number');
+            return;
+        }
+
+        if (amountValue <= 0) {
+            setError('Amount must be a positive number');
+            return;
+        }
+
+        if (!title || !amount || !date || !category || !description) {
+            setError('All fields are required');
+            return;
+        }
+
+        try {
+            await addIncome(inputState);
+            setInputState({
+                title: '',
+                amount: '',
+                date: new Date(),
+                category: '',
+                description: '',
+            });
+        } catch (error) {
+            if (error.response && error.response.status === 400) {
+                setError('Invalid expense data. Please check your input.');
+            } else {
+                setError('Failed to add expense. Please try again.');
+            }
+        }
+    };
 
     return (
         <FormStyled onSubmit={handleSubmit}>
