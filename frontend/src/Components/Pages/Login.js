@@ -17,6 +17,10 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setEmailError("");
+    setPasswordError("");
+    setLoginError("");    
+
     if (!email) {
       setEmailError("Please enter your email");
     } else if (!isValidEmail(email)) {
@@ -73,6 +77,7 @@ const Login = () => {
         </FormField>
         <SubmitButton disabled={isLoading}>Log in</SubmitButton>
         {loginError && <ErrorMessage>{loginError}</ErrorMessage>}
+        {error && <ErrorMessage>{error}</ErrorMessage>}
       </LoginForm>
       <SignupLink to="/signup">Don't have an account? Sign up</SignupLink>
     </CenteredContainer>
