@@ -1,16 +1,17 @@
-import React, { useEffect } from 'react'
-import styled from 'styled-components'
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
 import { useGlobalContext } from '../../context/globalContext';
 import { InnerLayout } from '../../styles/Layouts';
 import Form from '../Form/Form';
 import IncomeItem from '../IncomeItem/IncomeItem';
 
 function Income() {
-    const {incomes, getIncomes, deleteIncome, totalIncome} = useGlobalContext()
+    const { incomes, getIncomes, deleteIncome, totalIncome } = useGlobalContext();
 
-    useEffect(() =>{
-        getIncomes()
-    }, [getIncomes])
+    useEffect(() => {
+        getIncomes(); // Llama a getIncomes() solo una vez al montar el componente
+    }, []); // Dependencia vacía para ejecución única al montar
+
     return (
         <IncomeStyled>
             <InnerLayout>
@@ -21,32 +22,31 @@ function Income() {
                         <Form />
                     </div>
                     <div className="incomes">
-                        {incomes.map((income) => {
-                            const {_id, title, amount, date, category, description, type} = income;
-                            return <IncomeItem
-                                key={_id}
-                                id={_id} 
-                                title={title} 
-                                description={description} 
-                                amount={amount} 
-                                date={date} 
-                                type={type}
-                                category={category} 
+                        {incomes.map((income) => (
+                            <IncomeItem
+                                key={income._id}
+                                id={income._id} 
+                                title={income.title} 
+                                description={income.description} 
+                                amount={income.amount} 
+                                date={income.date} 
+                                type={income.type}
+                                category={income.category} 
                                 indicatorColor="var(--color-green)"
                                 deleteItem={deleteIncome}
                             />
-                        })}
+                        ))}
                     </div>
                 </div>
             </InnerLayout>
         </IncomeStyled>
-    )
+    );
 }
 
 const IncomeStyled = styled.div`
     display: flex;
     overflow: auto;
-    .total-income{
+    .total-income {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -58,19 +58,19 @@ const IncomeStyled = styled.div`
         margin: 1rem 0;
         font-size: 2rem;
         gap: .5rem;
-        span{
+        span {
             font-size: 2.5rem;
             font-weight: 800;
             color: var(--color-green);
         }
     }
-    .income-content{
+    .income-content {
         display: flex;
         gap: 2rem;
-        .incomes{
+        .incomes {
             flex: 1;
         }
     }
 `;
 
-export default Income
+export default Income;
