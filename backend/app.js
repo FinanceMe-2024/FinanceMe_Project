@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { db } = require('./db/db');
 const { readdirSync } = require('fs');
+const { execFile } = require('child_process'); 
 const axios = require('axios'); // Importa Axios para hacer solicitudes HTTP
 const app = express();
 const userRoutes = require('./routes/users');
@@ -18,8 +19,37 @@ app.use(cors());
 readdirSync('./routes').map((route) => app.use('/api/v1', require('./routes/' + route)));
 app.use('/api/user', userRoutes);
 
-// Nuevo endpoint para obtener recomendaciones financieras
 app.post('/api/v1/getFinancialRecommendations', async (req, res) => {
+  const { balance } = req.body;
+
+  try {
+    const response = await axios.post(
+      'https://api-inference.huggingface.co/models/gpt2', // URL del modelo en Hugging Face
+      {
+        inputs: `Recommend financial actions for a balance of $${balance}.`, // Modifica el formato de la entrada
+        options: {
+          temperature: 0.7, // Ajusta la temperatura para la generación de texto
+          max_new_tokens: 100, // Define el máximo de tokens generados
+        },
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.HUGGING_FACE_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    const recommendation = response.data[0].generated_text.trim();
+    res.json({ recommendation });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Nuevo endpoint para obtener recomendaciones financieras
+/*app.post('/api/v1/getFinancialRecommendations', async (req, res) => {
   const { balance } = req.body;
 
   try {
@@ -41,7 +71,7 @@ app.post('/api/v1/getFinancialRecommendations', async (req, res) => {
     console.error('Error data:', error.response.data); // Imprimir el objeto de error completo
     res.status(500).json({ error: 'Internal Server Error' });
   }
-});
+});*/
 
 const server = () => {
   db();

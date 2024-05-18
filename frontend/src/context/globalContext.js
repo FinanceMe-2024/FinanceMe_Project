@@ -94,12 +94,18 @@ export const GlobalProvider = ({ children }) => {
 
     const getFinancialRecommendations = async (balance) => {
         try {
-            const response = await axiosInstance.post('http://localhost:5050/api/v1/getFinancialRecommendations', { balance });
+            const localAxiosInstance = axios.create({
+                baseURL: 'http://localhost:5050/api/v1/' // URL base para la solicitud local
+            });
+            const response = await localAxiosInstance.post('getFinancialRecommendations', { balance });
             setRecommendation(response.data.recommendation);
         } catch (error) {
             setError(error.message);
+            console.error('Error data:', error.response.data);
         }
-    };    
+    };
+    
+   
 
     return (
         <GlobalContext.Provider value={{

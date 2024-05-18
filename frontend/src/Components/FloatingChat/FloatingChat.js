@@ -1,66 +1,60 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useGlobalContext } from '../../context/globalContext';
+import axios from 'axios'; // Importa Axios para hacer solicitudes HTTP
 
 const FloatingChat = () => {
-    const { totalBalance, getFinancialRecommendations } = useGlobalContext();
+    const { totalBalance } = useGlobalContext();
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState([
         { text: '¡Hola! Soy tu asistente financiero. ¿En qué puedo ayudarte hoy?', from: 'bot' }
     ]);
-    const [userMessage, setUserMessage] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const toggleChat = () => {
         setIsOpen(!isOpen);
     };
 
-    const handleMessageSend = async () => {
-        if (!userMessage.trim()) return;
-
-        const newMessages = [...messages, { text: userMessage, from: 'user' }];
-        setMessages(newMessages);
-
-        // Aquí se llama a la función del contexto global para obtener recomendaciones financieras
-        await getFinancialRecommendations(totalBalance());
-
-        setUserMessage('');
+    const handleToggleOptions = async () => {
+        setIsLoading(true);
+        try {
+            const response = await axios.post('http://localhost:5050/api/v1/getFinancialRecommendations', {
+                balance: totalBalance()
+            });
+            setMessages([
+                ...messages,
+                { text: response.data.recommendation, from: 'bot' }
+            ]);
+        } catch (error) {
+            console.error('Error:', error);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
-        <ChatContainer>
-            <ChatButton onClick={toggleChat}>{isOpen ? 'Cerrar' : 'Asistente'}</ChatButton>
+        <React.Fragment>
+            <OpenButton onClick={toggleChat}>{isOpen ? 'Cerrar' : 'Asistente'}</OpenButton>
             {isOpen && (
-                <ChatBox>
-                    <ChatMessages>
-                        {messages.map((msg, index) => (
-                            <Message key={index} from={msg.from}>
-                                {msg.text}
-                            </Message>
-                        ))}
-                    </ChatMessages>
-                    <ChatInputContainer>
-                        <ChatInput
-                            type="text"
-                            value={userMessage}
-                            onChange={(e) => setUserMessage(e.target.value)}
-                            placeholder="Escribe tu mensaje..."
-                        />
-                        <SendButton onClick={handleMessageSend}>Enviar</SendButton>
-                    </ChatInputContainer>
-                </ChatBox>
+                <ChatContainer>
+                    <CloseButton onClick={toggleChat}>×</CloseButton>
+                    <ChatBox>
+                        <ChatMessages>
+                            {messages.map((msg, index) => (
+                                <Message key={index} from={msg.from}>
+                                    {msg.text}
+                                </Message>
+                            ))}
+                        </ChatMessages>
+                        <OptionsButton onClick={handleToggleOptions}>Obtener recomendación</OptionsButton>
+                    </ChatBox>
+                </ChatContainer>
             )}
-        </ChatContainer>
+        </React.Fragment>
     );
 };
 
-const ChatContainer = styled.div`
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1000;
-`;
-
-const ChatButton = styled.button`
+const OpenButton = styled.button`
     background-color: #007bff;
     color: white;
     padding: 10px 20px;
@@ -68,6 +62,27 @@ const ChatButton = styled.button`
     border-radius: 30px;
     cursor: pointer;
     font-size: 16px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+`;
+
+const ChatContainer = styled.div`
+    position: fixed;
+    bottom: 80px; /* Espacio para el botón de abrir */
+    right: 20px;
+    z-index: 1000;
+`;
+
+const CloseButton = styled.button`
+    background-color: transparent;
+    color: #999;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    align-self: flex-end;
+    margin-right: 10px;
 `;
 
 const ChatBox = styled.div`
@@ -110,6 +125,14 @@ const ChatInput = styled.input`
 `;
 
 const SendButton = styled.button`
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+`;
+
+const OptionsButton = styled.button`
     background-color: #007bff;
     color: white;
     border: none;
