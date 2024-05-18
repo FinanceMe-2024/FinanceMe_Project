@@ -11,6 +11,7 @@ export const GlobalProvider = ({ children }) => {
     const [incomes, setIncomes] = useState([]);
     const [expenses, setExpenses] = useState([]);
     const [error, setError] = useState(null);
+    const [recommendation, setRecommendation] = useState('');
 
     const axiosInstance = axios.create({
         baseURL: BASE_URL,
@@ -91,6 +92,15 @@ export const GlobalProvider = ({ children }) => {
         return history.slice();
     };
 
+    const getFinancialRecommendations = async (balance) => {
+        try {
+            const response = await axiosInstance.post('http://localhost:5050/api/v1/getFinancialRecommendations', { balance });
+            setRecommendation(response.data.recommendation);
+        } catch (error) {
+            setError(error.message);
+        }
+    };    
+
     return (
         <GlobalContext.Provider value={{
             addIncome,
@@ -106,8 +116,11 @@ export const GlobalProvider = ({ children }) => {
             totalBalance,
             transactionHistory,
             error,
-            setError
+            setError,
+            recommendation, // Agrega la recomendación al contexto global
+            getFinancialRecommendations // Agrega la función para obtener recomendaciones
         }}>
+
             {children}
         </GlobalContext.Provider>
     );
