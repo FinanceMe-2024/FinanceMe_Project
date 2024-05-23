@@ -5,6 +5,7 @@ import History from '../../History/History';
 import { InnerLayout } from '../../styles/Layouts';
 import { dollar } from '../../utils/Icons';
 import Chart from '../Chart/Chart';
+import FloatingChat from '../FloatingChat/FloatingChat';
 
 function Dashboard() {
     const {
@@ -72,6 +73,7 @@ function Dashboard() {
                     </div>
                 </div>
             </InnerLayout>
+            <FloatingChat />{/* Agrega el componente FloatingChat */}
         </DashboardStyled>
     );
 }

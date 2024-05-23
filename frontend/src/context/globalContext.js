@@ -11,6 +11,10 @@ export const GlobalProvider = ({ children }) => {
     const [incomes, setIncomes] = useState([]);
     const [expenses, setExpenses] = useState([]);
     const [error, setError] = useState(null);
+    const [recommendation, setRecommendation] = useState('');
+    const [incomeRecommendation, setIncomeRecommendation] = useState('');
+    const [expenseRecommendation, setExpenseRecommendation] = useState('');
+
 
     const axiosInstance = axios.create({
         baseURL: BASE_URL,
@@ -91,6 +95,36 @@ export const GlobalProvider = ({ children }) => {
         return history.slice();
     };
 
+    const getFinancialRecommendations = async () => {
+        try {
+            const response = await axiosInstance.post('http://localhost:5050/api/v1/getFinancialRecommendations', { balance: totalBalance() });
+            setRecommendation(response.data.recommendation);
+        } catch (error) {
+            setError(error.message);
+            console.error('Error data:', error.response.data); // Añadido para depuración
+        }
+    };     
+
+    const getIncomeRecommendations = async () => {
+        try {
+            const response = await axiosInstance.post('http://localhost:5050/api/v1/getIncomeRecommendations', { income: totalIncome() });
+            setIncomeRecommendation(response.data.recommendation);
+        } catch (error) {
+            setError(error.message);
+            console.error('Error data:', error.response.data); // Añadido para depuración
+        }
+    }; 
+
+    const getExpenseRecommendations = async () => {
+        try {
+            const response = await axiosInstance.post('http://localhost:5050/api/v1/getExpenseRecommendations', { expense: totalExpenses() });
+            setExpenseRecommendation(response.data.recommendation);
+        } catch (error) {
+            setError(error.message);
+            console.error('Error data:', error.response.data); // Añadido para depuración
+        }
+    }; 
+
     return (
         <GlobalContext.Provider value={{
             addIncome,
@@ -106,8 +140,15 @@ export const GlobalProvider = ({ children }) => {
             totalBalance,
             transactionHistory,
             error,
-            setError
+            setError,
+            recommendation, 
+            incomeRecommendation, 
+            expenseRecommendation, 
+            getFinancialRecommendations,
+            getIncomeRecommendations,
+            getExpenseRecommendations
         }}>
+
             {children}
         </GlobalContext.Provider>
     );
