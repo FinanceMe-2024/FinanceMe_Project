@@ -97,7 +97,7 @@ export const GlobalProvider = ({ children }) => {
 
     const getFinancialRecommendations = async () => {
         try {
-            const response = await axiosInstance.post('http://localhost:5050/api/v1/getFinancialRecommendations', { balance: totalBalance(),income: totalIncome(), expense: totalExpenses() });
+            const response = await axiosInstance.post('getFinancialRecommendations', { balance: totalBalance(),income: totalIncome(), expense: totalExpenses() });
             setRecommendation(response.data.recommendation);
         } catch (error) {
             setError(error.message);
