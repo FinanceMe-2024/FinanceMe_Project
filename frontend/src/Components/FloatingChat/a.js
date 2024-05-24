@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useGlobalContext } from '../../context/globalContext';
 
 const FloatingChat = () => {
-    const { totalBalance, getFinancialRecommendations, recommendation } = useGlobalContext();
-
+    const { totalBalance, getFinancialRecommendations, recommendation, getIncomeRecommendations, getExpenseRecommendations, incomeRecommendation, expenseRecommendation } = useGlobalContext();
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState([
-        { text: 'Hi, I am your financial assistant. How can I help you today?', from: 'bot' }
+        { text: '¡Hola! Soy tu asistente financiero. ¿En qué puedo ayudarte hoy?', from: 'bot' }
     ]);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -15,29 +14,46 @@ const FloatingChat = () => {
         setIsOpen(!isOpen);
     };
 
-    useEffect(() => {
-        if (recommendation) {
+    const handleToggleOptions = async () => {
+        setIsLoading(true);
+        try {
+            await getFinancialRecommendations();
             setMessages(prevMessages => [
                 ...prevMessages,
                 { text: recommendation, from: 'bot' }
             ]);
+        } catch (error) {
+            console.error('Error:', error);
+        } finally {
+            setIsLoading(false);
         }
-    }, [recommendation]);
+    };
 
-    useEffect(() => {
-        // Limpia los mensajes al cargar el componente
-        setMessages([{ text: 'Hi, I am your financial assistant. How can I help you today?', from: 'bot' }]);
-    }, []);
-
-    const handleRecommendation = async () => {
+    const handleIncomeRecommendation = async () => {
         setIsLoading(true);
         try {
-            await getFinancialRecommendations();
-        } catch (error) {
+            await getIncomeRecommendations();
             setMessages(prevMessages => [
                 ...prevMessages,
-                { text: 'Lo siento, hubo un error obteniendo la recomendación. Inténtalo de nuevo.', from: 'bot' }
+                { text: incomeRecommendation, from: 'bot' }
             ]);
+        } catch (error) {
+            console.error('Error:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleExpenseRecommendation = async () => {
+        setIsLoading(true);
+        try {
+            await getExpenseRecommendations();
+            setMessages(prevMessages => [
+                ...prevMessages,
+                { text: expenseRecommendation, from: 'bot' }
+            ]);
+        } catch (error) {
+            console.error('Error:', error);
         } finally {
             setIsLoading(false);
         }
@@ -57,8 +73,14 @@ const FloatingChat = () => {
                                 </Message>
                             ))}
                         </ChatMessages>
-                        <OptionsButton onClick={handleRecommendation} disabled={isLoading}>
-                            {isLoading ? 'Obteniendo recomendación...' : 'Obtener recomendación financiera'}
+                        <OptionsButton onClick={handleToggleOptions} disabled={isLoading}>
+                            {isLoading ? 'Obteniendo recomendación financiera...' : 'Obtener recomendación financiera'}
+                        </OptionsButton>
+                        <OptionsButton onClick={handleIncomeRecommendation} disabled={isLoading}>
+                            {isLoading ? 'Obteniendo recomendación de ingresos...' : 'Obtener recomendación de ingresos'}
+                        </OptionsButton>
+                        <OptionsButton onClick={handleExpenseRecommendation} disabled={isLoading}>
+                            {isLoading ? 'Obteniendo recomendación de gastos...' : 'Obtener recomendación de gastos'}
                         </OptionsButton>
                     </ChatBox>
                 </ChatContainer>
@@ -83,8 +105,8 @@ const OpenButton = styled.button`
 
 const ChatContainer = styled.div`
     position: fixed;
-    bottom: 5%; /* Espacio para el botón de abrir */
-    right: 5%;
+    bottom: 80px; /* Espacio para el botón de abrir */
+    right: 20px;
     z-index: 1000;
 `;
 
@@ -100,10 +122,8 @@ const CloseButton = styled.button`
 
 const ChatBox = styled.div`
     background-color: white;
-    width: 90vw; /* Ancho máximo del 90% del viewport */
-    height: 70vh; /* Altura del 70% del viewport */
-    max-width: 500px; /* Máximo ancho de 500px */
-    max-height: 600px; /* Máxima altura de 600px */
+    width: 300px;
+    height: 400px;
     border-radius: 10px;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
     display: flex;
@@ -136,4 +156,3 @@ const OptionsButton = styled.button`
 `;
 
 export default FloatingChat;
-

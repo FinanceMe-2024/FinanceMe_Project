@@ -97,33 +97,13 @@ export const GlobalProvider = ({ children }) => {
 
     const getFinancialRecommendations = async () => {
         try {
-            const response = await axiosInstance.post('http://localhost:5050/api/v1/getFinancialRecommendations', { balance: totalBalance() });
+            const response = await axiosInstance.post('http://localhost:5050/api/v1/getFinancialRecommendations', { balance: totalBalance(),income: totalIncome(), expense: totalExpenses() });
             setRecommendation(response.data.recommendation);
         } catch (error) {
             setError(error.message);
             console.error('Error data:', error.response.data); // Añadido para depuración
         }
     };     
-
-    const getIncomeRecommendations = async () => {
-        try {
-            const response = await axiosInstance.post('http://localhost:5050/api/v1/getIncomeRecommendations', { income: totalIncome() });
-            setIncomeRecommendation(response.data.recommendation);
-        } catch (error) {
-            setError(error.message);
-            console.error('Error data:', error.response.data); // Añadido para depuración
-        }
-    }; 
-
-    const getExpenseRecommendations = async () => {
-        try {
-            const response = await axiosInstance.post('http://localhost:5050/api/v1/getExpenseRecommendations', { expense: totalExpenses() });
-            setExpenseRecommendation(response.data.recommendation);
-        } catch (error) {
-            setError(error.message);
-            console.error('Error data:', error.response.data); // Añadido para depuración
-        }
-    }; 
 
     return (
         <GlobalContext.Provider value={{
@@ -142,11 +122,7 @@ export const GlobalProvider = ({ children }) => {
             error,
             setError,
             recommendation, 
-            incomeRecommendation, 
-            expenseRecommendation, 
-            getFinancialRecommendations,
-            getIncomeRecommendations,
-            getExpenseRecommendations
+            getFinancialRecommendations
         }}>
 
             {children}
