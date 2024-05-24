@@ -6,11 +6,14 @@ const { execFile } = require('child_process');
 const axios = require('axios'); // Importa Axios para hacer solicitudes HTTP
 const app = express();
 const userRoutes = require('./routes/users');
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const { Console } = require('console');
 
 require('dotenv').config();
 
 const PORT = process.env.PORT;
-
+const API_KEY = process.env.GEMINI_API_KEY;
+console.log(API_KEY);
 //middlewares
 app.use(express.json());
 app.use(cors());
@@ -19,32 +22,72 @@ app.use(cors());
 readdirSync('./routes').map((route) => app.use('/api/v1', require('./routes/' + route)));
 app.use('/api/user', userRoutes);
 
-app.post('/api/v1/getFinancialRecommendations', async (req, res) => {
-  const { balance } = req.body;
+const genAI = new GoogleGenerativeAI(API_KEY);
 
+const getRecommendations = async (prompt) => {
   try {
-    const response = await axios.post(
-      'https://api-inference.huggingface.co/models/gpt2', // URL del modelo en Hugging Face
-      {
-        inputs: `Recommend financial actions for a balance of $${balance}.`, // Modifica el formato de la entrada
-        options: {
-          temperature: 0.7, // Ajusta la temperatura para la generación de texto
-          max_new_tokens: 100, // Define el máximo de tokens generados
-        },
-      },
-      {
-        headers: {
-          'Authorization': `Bearer ${process.env.HUGGING_FACE_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+    return text.trim();
+  } catch (error) {
+    console.error('Error:', error.response ? error.response.data : error.message);
+    throw new Error('Failed to fetch recommendations');
+  }
+};
 
-    const recommendation = response.data[0].generated_text.trim();
+app.post('/api/v1/getFinancialRecommendations', async (req, res) => {
+  const { balance, income, expense} = req.body;
+  const prompt = `
+    You are a financial advisor. I have a balance of $${balance}, 
+    I am a worker, with current income of $${income} and outgoings 
+    of $${expense} and need recommendations.
+  `;
+  console.log(prompt);
+  try {
+    const recommendation = await getRecommendations(prompt);
     res.json({ recommendation });
   } catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: 'Internal Server Error', details: error.message });
+  }
+});
+
+app.post('/api/v1/getIncomeRecommendations', async (req, res) => {
+  const { income } = req.body;
+  const prompt = `
+  You are a financial advisor. Given an incomes of $${income}, recommend specific financial actions that the user should take. Consider the following:
+  - Savings and investment strategies
+  - Risk management
+  - Short-term and long-term financial goals
+  - Any potential market conditions
+  Please provide detailed and actionable recommendations.
+  `;
+  console.log(prompt);
+  try {
+    const recommendation = await getRecommendations(prompt);
+    res.json({ recommendation });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error', details: error.message });
+  }
+});
+
+/*app.post('/api/v1/getExpenseRecommendations', async (req, res) => {
+  const { expense } = req.body;
+  const prompt = `
+  You are a financial advisor. Given an expense of $${expense}, recommend specific financial actions that the user should take. Consider the following:
+  - Savings and investment strategies
+  - Risk management
+  - Short-term and long-term financial goals
+  - Any potential market conditions
+  Please provide detailed and actionable recommendations.
+  `;
+  console.log(prompt);
+  try {
+    const recommendation = await getRecommendations(prompt);
+    res.json({ recommendation });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error', details: error.message });
   }
 });
 
