@@ -9,7 +9,6 @@ const userRoutes = require('./routes/users');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const { Console } = require('console');
 
-
 require('dotenv').config();
 
 const PORT = process.env.PORT;

@@ -79,6 +79,7 @@ function Dashboard() {
 }
 
 const DashboardStyled = styled.div`
+
     .stats-con{
         display: grid;
         grid-template-columns: repeat(5, 1fr);

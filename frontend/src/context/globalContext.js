@@ -15,7 +15,6 @@ export const GlobalProvider = ({ children }) => {
     const [incomeRecommendation, setIncomeRecommendation] = useState('');
     const [expenseRecommendation, setExpenseRecommendation] = useState('');
 
-
     const axiosInstance = axios.create({
         baseURL: BASE_URL,
         headers: {

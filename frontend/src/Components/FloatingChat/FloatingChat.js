@@ -136,4 +136,3 @@ const OptionsButton = styled.button`
 `;
 
 export default FloatingChat;
-
