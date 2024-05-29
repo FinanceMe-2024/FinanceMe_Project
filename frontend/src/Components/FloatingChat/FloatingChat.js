@@ -36,7 +36,7 @@ const FloatingChat = () => {
         } catch (error) {
             setMessages(prevMessages => [
                 ...prevMessages,
-                { text: 'Lo siento, hubo un error obteniendo la recomendación. Inténtalo de nuevo.', from: 'bot' }
+                { text: 'Sorry, there was an error getting the recommendation. Try again.', from: 'bot' }
             ]);
         } finally {
             setIsLoading(false);
@@ -45,7 +45,7 @@ const FloatingChat = () => {
 
     return (
         <React.Fragment>
-            <OpenButton onClick={toggleChat}>{isOpen ? 'Cerrar' : 'Asistente'}</OpenButton>
+            <OpenButton onClick={toggleChat}>{isOpen ? 'Close' : 'Assistant'}</OpenButton>
             {isOpen && (
                 <ChatContainer>
                     <CloseButton onClick={toggleChat}>×</CloseButton>
@@ -58,7 +58,7 @@ const FloatingChat = () => {
                             ))}
                         </ChatMessages>
                         <OptionsButton onClick={handleRecommendation} disabled={isLoading}>
-                            {isLoading ? 'Obteniendo recomendación...' : 'Obtener recomendación financiera'}
+                            {isLoading ? 'Getting recommendation...' : 'Get financial recommendation'}
                         </OptionsButton>
                     </ChatBox>
                 </ChatContainer>
